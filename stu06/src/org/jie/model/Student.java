@@ -2,6 +2,11 @@ package org.jie.model;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Student {
 
 	private String name;
@@ -18,6 +23,8 @@ public class Student {
 		this.name = name;
 	}
 
+	@Id
+	@GeneratedValue
 	public Integer getId() {
 		return id;
 	}

@@ -1,5 +1,10 @@
 package org.jie.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class User {
 
 	private Integer id;
@@ -7,6 +12,8 @@ public class User {
 	private String userPwd;
 	private String resources;
 
+	@Id
+	@GeneratedValue
 	public Integer getId() {
 		return id;
 	}

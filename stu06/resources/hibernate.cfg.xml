@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE hibernate-configuration PUBLIC 
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN" 
+	"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+	
+	<hibernate-configuration>
+		<session-factory>
+			<property name="connection.url">jdbc:mysql://127.0.0.1:3306/test</property>
+			<property name="connection.username">root</property> 
+			<property name="connection.password">shsxt</property>
+			<!-- 数据库JDBC驱动类名 -->
+			<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+			<!-- 数据库方言 -->
+			<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+			<!-- ddl语句自动建表 -->
+			<property name="hbm2ddl.auto">update</property> 
+			<property name="show_sql">true</property> 
+			<property name="format_sql">true</property> 
+			<property name="javax.persistence.validation.mode">none</property>
+			<!--connection.useUnicode连接数据库时是否使用Unicode编码-->
+			<property name="Connection.useUnicode">true</property>
+			<!--connection.characterEncoding连接数据库时数据的传输字符集编码方式，设置为utf8-->
+			<property name="connection.characterEncoding">utf8</property>
+			<mapping class="org.jie.model.User"/>
+			<mapping class="org.jie.model.Student"/>
+		</session-factory>
+	</hibernate-configuration>
