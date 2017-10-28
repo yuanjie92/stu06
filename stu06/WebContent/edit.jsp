@@ -14,7 +14,7 @@
 	<c:if test="${stu.gender==0 }">
 		<c:set var="gender" value="false"></c:set>
 	</c:if>
-	<form action="student" method="post">
+	<form action="update" method="post">
 		<input type="hidden" name="act" value="update">	
 		<input type="hidden" name="id" value="${stu.id }">
 		name:<input type="text" name="name" value="${stu.name }"><br>

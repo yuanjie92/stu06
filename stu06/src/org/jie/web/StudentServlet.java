@@ -1,6 +1,7 @@
 package org.jie.web;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -62,6 +63,29 @@ public class StudentServlet extends HttpServlet{
 		req.setAttribute("searchResults", searchResults);
 		req.setAttribute("name", name);
 		req.setAttribute("gender", gender);
+		//请求转发到list.jsp页面
+		req.getRequestDispatcher("list.jsp").forward(req, resp);
+	}
+	
+	public void queryByName(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException{
+		String name = req.getParameter("name");
+		String currentPage = req.getParameter("currentPage");
+		//默认为第一页
+		if(null == currentPage || "".equals(currentPage)){
+			currentPage = "1";
+		}
+		Pagination page = new Pagination();
+		page.setCurrentPage(Integer.parseInt(currentPage));
+		//设置每页记录为5
+		page.setPageSize(5);
+		//调用service中的查询方法
+		List<Student> students = studentService.queryByName(name);
+		//将查询到的结果放到request域中
+		req.setAttribute("students", students);
+		req.setAttribute("name", name);
+		for(Student stu : students){
+			System.out.println(stu.getName());
+		}
 		//请求转发到list.jsp页面
 		req.getRequestDispatcher("list.jsp").forward(req, resp);
 	}

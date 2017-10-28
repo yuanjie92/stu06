@@ -2,6 +2,7 @@ package org.jie.service.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import org.jie.dao.StudentDao;
 import org.jie.dao.impl.StudentDaoImpl;
@@ -65,6 +66,12 @@ public class StudentServiceImpl implements StudentService {
 		stu.setId(Integer.parseInt(id));
 		//调用dao的修改方法
 		studentDao.updateStudentById(stu);
+	}
+
+	@Override
+	public List<Student> queryByName(String name) {
+		
+		return studentDao.queryStudentByName(name);
 	}
 	
 }

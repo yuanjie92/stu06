@@ -14,9 +14,39 @@
   	<servlet-name>StudentServlet</servlet-name>
   	<servlet-class>org.jie.web.StudentServlet</servlet-class>
   </servlet>
+  
+  <servlet>
+  	<servlet-name>AddServlet</servlet-name>
+  	<servlet-class>org.jie.web.AddServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>UpdateServlet</servlet-name>
+  	<servlet-class>org.jie.web.UpdateServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>DelServlet</servlet-name>
+  	<servlet-class>org.jie.web.DelServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>DelServlet</servlet-name>
+  	<url-pattern>/del</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+  	<servlet-name>UpdateServlet</servlet-name>
+  	<url-pattern>/update</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+  	<servlet-name>AddServlet</servlet-name>
+  	<url-pattern>/add</url-pattern>
+  </servlet-mapping>
+  
   <servlet-mapping>
   	<servlet-name>StudentServlet</servlet-name>
   	<url-pattern>/student</url-pattern>
   </servlet-mapping>
+ 
   
 </web-app>

@@ -1,5 +1,7 @@
 package org.jie.dao;
 
+import java.util.List;
+
 import org.jie.model.Student;
 import org.jie.pagination.Pagination;
 import org.jie.pagination.SearchResult;
@@ -15,5 +17,8 @@ public interface StudentDao {
 	Student queryStudentById(int stuId);
 
 	boolean updateStudentById(Student stu);
+	
+	List<Student> queryStudentByName(String name);
+	
 
 }

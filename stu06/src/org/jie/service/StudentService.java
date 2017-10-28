@@ -1,5 +1,7 @@
 package org.jie.service;
 
+import java.util.List;
+
 import org.jie.model.Student;
 import org.jie.pagination.Pagination;
 import org.jie.pagination.SearchResult;
@@ -15,5 +17,9 @@ public interface StudentService {
 	Student findStudentById(String id);
 
 	void updateStudent(String id, String name, String grade, String gender, String birthday);
+
+	List<Student> queryByName(String name);
+	
+	
 
 }

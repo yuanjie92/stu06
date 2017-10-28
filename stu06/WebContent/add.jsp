@@ -9,7 +9,7 @@
 <body>
 	<h1>add student</h1>
 	<hr>
-	<form action="student" method="post">
+	<form action="add" method="post">
 		<input type="hidden" name="act" value="add">
 		name:<input type="text" name="name"><br>
 		grade:<input type="text" name="grade"><br>

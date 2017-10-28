@@ -4,15 +4,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.jie.dao.StudentDao;
 import org.jie.model.Student;
 import org.jie.pagination.Pagination;
 import org.jie.pagination.SearchResult;
 import org.jie.util.DBUtils;
+import org.jie.util.HibernateUtils;
 
 public class StudentDaoImpl implements StudentDao {
 
@@ -111,54 +113,22 @@ public class StudentDaoImpl implements StudentDao {
 	// 添加学生
 	@Override
 	public boolean saveStudent(Student stu) {
-		// 建立连接
-		conn = DBUtils.getConn();
-		boolean flag = false;
-		// 编写sql语句
-		String sql = "INSERT INTO tb_student (name,grade,gender,birthday) VALUES (?,?,?,?)";
-		try {
-			// 预编译
-			ps = conn.prepareStatement(sql);
-			// 依次给4个问号传值
-			ps.setString(1, stu.getName());
-			ps.setString(2, stu.getGrade());
-			ps.setInt(3, stu.getGender());
-			ps.setTimestamp(4, new Timestamp(stu.getBirthday().getTime()));
-			// 得到结果
-			int rs = ps.executeUpdate();
-			if (rs > 0) {
-				flag = true;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			DBUtils.close(conn, ps);
-		}
-		return flag;
+		return saveOrUpdate(stu);
 	}
 
 	// 通过id删除学生
 	@Override
 	public boolean deleteStudentById(int stuId) {
-		// 建立连接
-		conn = DBUtils.getConn();
 		boolean flag = false;
-		// 编写sql语句
-		String sql = "DELETE FROM tb_student WHERE id=?";
+		// 建立连接
 		try {
-			// 预编译
-			ps = conn.prepareStatement(sql);
-			// 给第一个问号传值
-			ps.setInt(1, stuId);
-			// 得到结果
-			int rs = ps.executeUpdate();
-			if (rs > 0) {
-				flag = true;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			DBUtils.close(conn, ps);
+			Session session = HibernateUtils.getSession();
+			Student stu = (Student) session.get(Student.class, stuId);
+			session.delete(stu);
+			HibernateUtils.commitAndCloseSession();
+			flag = true;
+		} catch (Exception e) {
+			return false;
 		}
 		return flag;
 	}
@@ -166,63 +136,51 @@ public class StudentDaoImpl implements StudentDao {
 	// 通过id查询学生
 	@Override
 	public Student queryStudentById(int stuId) {
-		conn = DBUtils.getConn();
 		Student stu = null;
-		ResultSet rs = null;
-		// 写sql语句
-		String sql = "SELECT * FROM tb_student WHERE id=?";
+		// 建立连接
 		try {
-			// 预编译
-			ps = conn.prepareStatement(sql);
-			// 给第一个问号传值
-			ps.setInt(1, stuId);
-			// 得到结果
-			rs = ps.executeQuery();
-			if (rs == null) {
-				return null;
-			}
-			if (rs.next()) {
-				stu = new Student();
-				stu.setBirthday(rs.getTimestamp("birthday"));
-				stu.setGender(rs.getInt("gender"));
-				stu.setGrade(rs.getString("grade"));
-				stu.setId(rs.getInt("id"));
-				stu.setName(rs.getString("name"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			DBUtils.close(conn, ps, rs);
+			Session session = HibernateUtils.getSession();
+			stu = (Student) session.get(Student.class, stuId);
+			HibernateUtils.commitAndCloseSession();
+		} catch (Exception e) {
+			return null;
 		}
 		return stu;
+	}
+
+	// 通过name查询学生
+	@Override
+	public List<Student> queryStudentByName(String name) {
+		List<Student> stus = null;
+		// 建立连接
+		try {
+			Session session = HibernateUtils.getSession();
+			Query queryByName = session.createQuery("from Student where name=:queryName");
+			queryByName.setString("queryName", name);
+			stus = queryByName.list();
+			HibernateUtils.commitAndCloseSession();
+		} catch (Exception e) {
+			return null;
+		}
+		return stus;
 	}
 
 	// 通过id修改学生信息
 	@Override
 	public boolean updateStudentById(Student stu) {
-		// 获取连接
-		conn = DBUtils.getConn();
+		return saveOrUpdate(stu);
+	}
+
+	public boolean saveOrUpdate(Student stu) {
 		boolean flag = false;
-		// 编写sql语句
-		String sql = "UPDATE tb_student SET name=?,grade=?,gender=?,birthday=? WHERE id=?";
+		// 获取连接
 		try {
-			// 预编译
-			ps = conn.prepareStatement(sql);
-			// 依次给5个问号传值
-			ps.setString(1, stu.getName());
-			ps.setString(2, stu.getGrade());
-			ps.setInt(3, stu.getGender());
-			ps.setTimestamp(4, new Timestamp(stu.getBirthday().getTime()));
-			ps.setInt(5, stu.getId());
-			// 得到结果
-			int rs = ps.executeUpdate();
-			if (rs > 0) {
-				flag = true;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			DBUtils.close(conn, ps);
+			Session session = HibernateUtils.getSession();
+			session.saveOrUpdate(stu);
+			HibernateUtils.commitAndCloseSession();
+			flag = true;
+		} catch (Exception e) {
+			return false;
 		}
 		return flag;
 	}
